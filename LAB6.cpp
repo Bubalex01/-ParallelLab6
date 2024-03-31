@@ -44,6 +44,30 @@ double* FindY(double** A, double* X, int n) {
     return Y;
 }
 
+double* Gauss(double** A, double* Y, int n) {
+    double* X = new double[n];
+    for (int k = 0; k < n; k++)
+    {
+        for (int j = k + 1; j < n; j++) {
+            double m = A[j][k] / A[k][k];
+            for (int i = k; i < n; i++) {
+                A[j][i] = A[j][i] - m * A[k][i];
+            }
+            Y[j] = Y[j] - m * Y[k];
+        }
+    }
+    for (int k = n - 1; k >= 0; k--) {
+        X[k] = Y[k];
+        for (int i = k + 1; i < n; i++) {
+            X[k] = X[k] - A[k][i] * X[i];
+
+        }
+        X[k] = X[k] / A[k][k];
+    }
+
+    return X;
+}
+
 int main()
 {
     std::cout << "Hello World!\n";
