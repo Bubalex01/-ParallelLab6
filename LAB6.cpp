@@ -1,7 +1,10 @@
 ﻿// LAB6.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
+#include <tbb/tbb.h>
+#include <chrono>
 #include <iostream>
+using namespace std;
 
 int main()
 {
