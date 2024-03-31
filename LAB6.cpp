@@ -110,4 +110,29 @@ for (int i = 0; i < nX; i++) { //заполнение правой части
 }
 
 Y = FindY(A, X2, nX);
+
+std::cout << "OneTBB решение" << std::endl;
+auto begin = std::chrono::steady_clock::now();
+X = GaussTBB(A, Y, nX);
+auto end = std::chrono::steady_clock::now();
+auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+std::cout << "Время: " << elapsed_ms.count() << " ms\n";
+f = ArrEquial(X, X2, nX, 0.001);
+std::cout << "Количество несовпадений:" << f << std::endl;
+
+std::cout << "Прямое решение" << std::endl;
+begin = std::chrono::steady_clock::now();
+X = Gauss(A, Y, nX);
+end = std::chrono::steady_clock::now();
+elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+std::cout << "Время: " << elapsed_ms.count() << " ms\n";
+f = ArrEquial(X, X2, nX, 0.001);
+std::cout << "Количество несовпадений:" << f << std::endl;
+
+for (int i = 0; i < nX; i++) {
+    delete[] A[i];
+}
+delete[] A;
+delete[] X;
+delete[] Y;
 }
