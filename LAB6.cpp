@@ -44,16 +44,6 @@ double* FindY(double** A, double* X, int n) {
     return Y;
 }
 
-int ArrEquial(double* X1, double* X2, int n, double eps) {
-    int c = 0;
-    for (int i = 0; i < n; i++) {
-        if (std::abs(X1[i] - X2[i]) > eps) {
-            c++;
-        }
-    }
-    return c;
-}
-
 double* Gauss(double** A, double* Y, int n) {
     double* X = new double[n];
     for (int k = 0; k < n; k++)
@@ -78,61 +68,71 @@ double* Gauss(double** A, double* Y, int n) {
     return X;
 }
 
+int ArrEquial(double* X1, double* X2, int n, double eps) {
+    int c = 0;
+    for (int i = 0; i < n; i++) {
+        if (std::abs(X1[i] - X2[i]) > eps) {
+            c++;
+        }
+    }
+    return c;
+}
+
 int main()
 {
     setlocale(LC_ALL, "Russian");
 
-int nX=3200;
-int f = 0;
+    int nX=3200;
+    int f = 0;
 
-double** A = new double* [nX];
-for (int i = 0; i < nX; i++) {
-    A[i] = new double[nX];
-}
-for (int i = 0; i < nX; i++) {
-    for (int j = 0; j < nX; j++) {
-        A[i][j] = 0;
+    double** A = new double* [nX];
+    for (int i = 0; i < nX; i++) {
+        A[i] = new double[nX];
     }
-}
-
-double* X = new double[nX];
-double* X2 = new double[nX];
-double* Y = new double[nX];
-
-for (int i = 0; i < nX; i++) { //заполнение матрицы
-    for (int j = 0; j < nX; j++) {
-        A[i][j] = Rrand(-100, 100);
+    for (int i = 0; i < nX; i++) {
+        for (int j = 0; j < nX; j++) {
+            A[i][j] = 0;
+        }
     }
-}
 
-for (int i = 0; i < nX; i++) { //заполнение правой части
-    X2[i] = Rrand(-100, 100);
-}
+    double* X = new double[nX];
+    double* X2 = new double[nX];
+    double* Y = new double[nX];
 
-Y = FindY(A, X2, nX);
+    for (int i = 0; i < nX; i++) { //заполнение матрицы
+        for (int j = 0; j < nX; j++) {
+            A[i][j] = Rrand(-100, 100);
+        }
+    }
 
-std::cout << "OneTBB решение" << std::endl;
-auto begin = std::chrono::steady_clock::now();
-X = GaussTBB(A, Y, nX);
-auto end = std::chrono::steady_clock::now();
-auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-std::cout << "Время: " << elapsed_ms.count() << " ms\n";
-f = ArrEquial(X, X2, nX, 0.001);
-std::cout << "Количество несовпадений:" << f << std::endl;
+    for (int i = 0; i < nX; i++) { //заполнение правой части
+        X2[i] = Rrand(-100, 100);
+    }
 
-std::cout << "Прямое решение" << std::endl;
-begin = std::chrono::steady_clock::now();
-X = Gauss(A, Y, nX);
-end = std::chrono::steady_clock::now();
-elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-std::cout << "Время: " << elapsed_ms.count() << " ms\n";
-f = ArrEquial(X, X2, nX, 0.001);
-std::cout << "Количество несовпадений:" << f << std::endl;
+    Y = FindY(A, X2, nX);
 
-for (int i = 0; i < nX; i++) {
-    delete[] A[i];
-}
-delete[] A;
-delete[] X;
-delete[] Y;
+    std::cout << "OneTBB решение" << std::endl;
+    auto begin = std::chrono::steady_clock::now();
+    X = GaussTBB(A, Y, nX);
+    auto end = std::chrono::steady_clock::now();
+    auto elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+    std::cout << "Время: " << elapsed_ms.count() << " ms\n";
+    f = ArrEquial(X, X2, nX, 0.001);
+    std::cout << "Количество несовпадений:" << f << std::endl;
+
+    std::cout << "Прямое решение" << std::endl;
+    begin = std::chrono::steady_clock::now();
+    X = Gauss(A, Y, nX);
+    end = std::chrono::steady_clock::now();
+    elapsed_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
+    std::cout << "Время: " << elapsed_ms.count() << " ms\n";
+    f = ArrEquial(X, X2, nX, 0.001);
+    std::cout << "Количество несовпадений:" << f << std::endl;
+
+    for (int i = 0; i < nX; i++) {
+        delete[] A[i];
+    }
+    delete[] A;
+    delete[] X;
+    delete[] Y;
 }
