@@ -80,5 +80,34 @@ double* Gauss(double** A, double* Y, int n) {
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    setlocale(LC_ALL, "Russian");
+
+int nX=3200;
+int f = 0;
+
+double** A = new double* [nX];
+for (int i = 0; i < nX; i++) {
+    A[i] = new double[nX];
+}
+for (int i = 0; i < nX; i++) {
+    for (int j = 0; j < nX; j++) {
+        A[i][j] = 0;
+    }
+}
+
+double* X = new double[nX];
+double* X2 = new double[nX];
+double* Y = new double[nX];
+
+for (int i = 0; i < nX; i++) { //заполнение матрицы
+    for (int j = 0; j < nX; j++) {
+        A[i][j] = Rrand(-100, 100);
+    }
+}
+
+for (int i = 0; i < nX; i++) { //заполнение правой части
+    X2[i] = Rrand(-100, 100);
+}
+
+Y = FindY(A, X2, nX);
 }
