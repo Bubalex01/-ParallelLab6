@@ -33,6 +33,17 @@ double* GaussTBB(double** A, double* Y, int n) {
     return X;
 }
 
+double* FindY(double** A, double* X, int n) {
+    double* Y = new double[n];
+    for (int i = 0; i < n; i++) {
+        Y[i] = 0;
+        for (int j = 0; j < n; j++) {
+            Y[i] += A[i][j] * X[j];
+        }
+    }
+    return Y;
+}
+
 int main()
 {
     std::cout << "Hello World!\n";
