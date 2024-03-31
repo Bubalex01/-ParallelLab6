@@ -1,4 +1,4 @@
-﻿#include <tbb/tbb.h>
+#include <tbb/tbb.h>
 #include <chrono>
 #include <iostream>
 using namespace std;
@@ -42,6 +42,16 @@ double* FindY(double** A, double* X, int n) {
         }
     }
     return Y;
+}
+
+int ArrEquial(double* X1, double* X2, int n, double eps) {
+    int c = 0;
+    for (int i = 0; i < n; i++) {
+        if (std::abs(X1[i] - X2[i]) > eps) {
+            c++;
+        }
+    }
+    return c;
 }
 
 double* Gauss(double** A, double* Y, int n) {
